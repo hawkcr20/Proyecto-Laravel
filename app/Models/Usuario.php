@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Rol;
-use App\Models\Reserva;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Usuario extends Model
+class Usuario extends Authenticatable
 {
-    protected $table = 'usuarios';
+    use HasApiTokens, HasFactory, Notifiable;
 
-    
+    protected $table = 'usuarios';
 
     protected $fillable = [
         'nombre',
@@ -25,11 +26,16 @@ class Usuario extends Model
 
     protected $hidden = [
         'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
     ];
 
     public function rol()
     {
-        return $this->belongsTo(Rol::class, 'idRol', 'idRol');
+        return $this->belongsTo(Rol::class, 'idRol', 'id');
     }
 
     public function reservas()

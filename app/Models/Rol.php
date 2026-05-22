@@ -3,21 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Usuario;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Rol extends Model
 {
-    protected $table = 'roles';
+    use HasFactory;
 
-    protected $primaryKey = 'idRol';
+    protected $table = 'roles';
 
     protected $fillable = [
         'nombre',
     ];
 
-    
-    public function users()
+    public function usuarios()
     {
-        return $this->hasMany(Usuario::class, 'idRol');
+        return $this->hasMany(Usuario::class, 'idRol', 'id');
     }
 }

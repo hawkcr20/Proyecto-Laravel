@@ -12,21 +12,21 @@ return new class extends Migration
     public function up()
     {
         Schema::create('usuarios', function (Blueprint $table) {
-            $table->id(); // 🔥 CLAVE PRIMARIA CORRECTA
+
+            $table->id();
 
             $table->string('nombre');
             $table->string('apellidoUno');
             $table->string('apellidoDos')->nullable();
+
             $table->string('email')->unique();
             $table->string('telefono')->nullable();
+
             $table->string('userName')->unique();
             $table->string('password');
 
-            $table->unsignedBigInteger('idRol');
-
-            $table->foreign('idRol')
-                ->references('idRol')
-                ->on('roles')
+            $table->foreignId('idRol')
+                ->constrained('roles')
                 ->onDelete('cascade');
 
             $table->timestamps();

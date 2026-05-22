@@ -3,20 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Usuario;
-use App\Models\Clase;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Reserva extends Model
 {
-    protected $table = 'reservas';
+    use HasFactory;
 
-    protected $primaryKey = 'idReserva';
+    protected $table = 'reservas';
 
     protected $fillable = [
         'idUsuario',
         'idClase',
         'fechaReserva',
         'estado',
+    ];
+
+    protected $casts = [
+        'fechaReserva' => 'datetime',
     ];
 
     public function usuario()
