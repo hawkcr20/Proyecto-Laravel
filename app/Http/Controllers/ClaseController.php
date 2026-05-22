@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Clase;
 use Illuminate\Http\Request;
 
 class ClaseController extends Controller
@@ -11,7 +12,12 @@ class ClaseController extends Controller
      */
     public function index()
     {
-        //
+        $clases = Clase::all();
+
+        return response()->json([
+            'success' => true,
+            'data' => $clases
+        ]);
     }
 
     /**
@@ -19,7 +25,23 @@ class ClaseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate([
+
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'required|string',
+            'diaSemana' => 'required|string|max:50',
+            'horario' => 'required',
+            'capacidad' => 'required|integer|min:1',
+        ]);
+
+        $clase = Clase::create($validate);
+
+        return response()->json([
+
+            'success' => true,
+            'message' => 'Clase creada correctamente',
+            'data' => $clase
+        ], 201);
     }
 
     /**
@@ -27,7 +49,21 @@ class ClaseController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $clase = Clase::find($id);
+
+        if (!$clase) {
+
+            return response()->json([
+
+                'success' => false,
+                'message' => 'Clase no encontrada'
+            ], 404);
+        }
+        return response()->json([
+            
+            'success' => true,
+            'data' => $clase
+        ]);
     }
 
     /**
@@ -35,7 +71,33 @@ class ClaseController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $clase = Clase::find($id);
+
+        if (!$clase) {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Clase no encontrada'
+            ], 404);
+        }
+
+        $validated = $request->validate([
+
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'required|string',
+            'diaSemana' => 'required|string|max:50',
+            'horario' => 'required',
+            'capacidad' => 'required|integer|min:1',
+        ]);
+
+        $clase->update($validated);
+
+        return response()->json([
+
+            'success' => true,
+            'message' => 'Clase actualizada correctamente',
+            'data' => $clase
+        ]);
     }
 
     /**
@@ -43,6 +105,23 @@ class ClaseController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $clase = Clase::find($id);
+
+        if (!$clase) {
+
+            return response()->json([
+
+                'success' => false,
+                'message' => 'Clase no encontrada'
+            ], 404);
+        }
+
+        $clase->delete();
+
+        return response()->json([
+            
+            'success' => true,
+            'message' => 'Clase eliminada correctamente'
+        ]);
     }
 }
