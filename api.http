@@ -5,6 +5,7 @@ Content-Type: application/json
   "userName": "admin",
   "password": "1234"
 }
+
 ###
 GET http://localhost:8000/api/clases
 Authorization: Bearer 2|ahz07ytZGMk0JSvmvfDevwkrKNXip5quu62aTljIf7a8ee8f
