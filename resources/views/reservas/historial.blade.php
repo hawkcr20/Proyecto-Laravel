@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Historial de Clases</title>
+
+    <link rel="stylesheet" href="{{ asset('css/historial.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#"><span id="nombreUsuario"></span></a>
+
+        <div class="d-flex">
+            <a href="/inicio" class="btn btn-login-neon">Volver</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+
+    <div class="card p-4">
+        <h3 class="mb-4 text-center">Historial de Clases Reservadas</h3>
+
+        <table class="table table-striped table-dark text-center">
+            <thead>
+                <tr>
+                    <th>Clase</th>
+                    <th>Capacidad de personas</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+
+            <tbody id="tablaHistorial">
+                <tr>
+                    <td colspan="5">Cargando historial...</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<footer class="footer mt-5 py-4 text-center">
+    <div class="container">
+        <img src="{{ asset('img/logo.png') }}" alt="Logo" width="120" class="mb-2">
+        <p class="mb-1">© 2026 VIKINGS</p>
+        <p class="mb-0 small">Todos los derechos reservados</p>
+    </div>
+</footer>
+
+<script src="{{ asset('js/auth.js') }}"></script>
+
+<script>
+    requireAuth();
+
+    async function cargarHistorial() {
+        const tabla = document.getElementById("tablaHistorial");
+
+        try {
+            const response = await authFetch("/api/reservas/mis-clases", {
+                method: "GET"
+            });
+
+            if (!response || !response.ok) {
+                tabla.innerHTML = `
+                    <tr>
+                        <td colspan="5">No se pudo cargar el historial</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            const respuesta = await response.json();
+            const data = respuesta.data ?? respuesta;
+
+            tabla.innerHTML = "";
+
+            if (data.length === 0) {
+                tabla.innerHTML = `
+                    <tr>
+                        <td colspan="5">No tienes clases reservadas</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            let contenido = "";
+
+            data.forEach(reserva => {
+                contenido += `
+                    <tr>
+                        <td>${reserva.nombreClase ?? ""}</td>
+                        <td>${reserva.capacidad ?? ""}</td>
+                        <td>${reserva.fechaReserva ?? ""}</td>
+                        <td>${reserva.horario ?? ""}</td>
+                        <td>${reserva.estado ?? ""}</td>
+                    </tr>
+                `;
+            });
+
+            tabla.innerHTML = contenido;
+
+        } catch (error) {
+            console.error("Error:", error);
+
+            tabla.innerHTML = `
+                <tr>
+                    <td colspan="5">Error al cargar historial</td>
+                </tr>
+            `;
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        cargarHistorial();
+
+        if (typeof getNombre === "function") {
+            getNombre();
+        }
+    });
+</script>
+
+</body>
+
+</html>
