@@ -7,41 +7,58 @@ use Illuminate\Http\Request;
 
 class UsuarioController extends Controller
 {
-
     public function index()
     {
         return response()->json([
             'success' => true,
-            'data' => Usuario::all()
+            'data' => Usuario::with('rol')->get()
         ]);
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'apellidoUno' => 'required|string|max:255',
+            'apellidoDos' => 'required|string|max:255',
             'email' => 'required|email|unique:usuarios,email',
-            'password' => 'required|string|min:6',
+            'telefono' => 'required|string|max:20',
+            'userName' => 'required|string|unique:usuarios,userName',
+            'password' => 'required|string|min:4'
         ]);
 
-        $validated['password'] = bcrypt($validated['password']);
+        $authUser = $request->user();
 
-        $usuario = Usuario::create($validated);
+        $idRol = 1;
+
+        if ($authUser && $authUser->rol && $authUser->rol->nombre === "ROLE_ADMIN") {
+            $idRol = 2;
+        }
+
+        $usuario = Usuario::create([
+            'nombre' => $request->nombre,
+            'apellidoUno' => $request->apellidoUno,
+            'apellidoDos' => $request->apellidoDos,
+            'email' => $request->email,
+            'telefono' => $request->telefono,
+            'userName' => $request->userName,
+            'password' => bcrypt($request->password),
+            'idRol' => $idRol
+            
+        ]);
 
         return response()->json([
             'success' => true,
             'message' => 'Usuario creado correctamente',
-            'data' => $usuario
+            'data' => $usuario->load('rol')
         ], 201);
     }
 
     public function show(string $id)
     {
-        $usuario = Usuario::findOrFail($id);
-
         return response()->json([
             'success' => true,
-            'data' => $usuario
+            'data' => Usuario::with('rol')->findOrFail($id)
         ]);
     }
 
@@ -49,22 +66,40 @@ class UsuarioController extends Controller
     {
         $usuario = Usuario::findOrFail($id);
 
-        $validated = $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-            'email' => 'sometimes|required|email|unique:usuarios,email,' . $id,
-            'password' => 'sometimes|required|string|min:6',
+        $request->validate([
+            'nombre' => 'sometimes|string|max:255',
+            'apellidoUno' => 'sometimes|string|max:255',
+            'apellidoDos' => 'sometimes|string|max:255',
+            'email' => 'sometimes|email|unique:usuarios,email,' . $id,
+            'telefono' => 'sometimes|string|max:20',
+            'userName' => 'sometimes|string|unique:usuarios,userName,' . $id,
+            'password' => 'nullable|string|min:4',
+            'idRol' => 'sometimes|integer'
         ]);
 
-        if (isset($validated['password'])) {
-            $validated['password'] = bcrypt($validated['password']);
+        $data = [
+            'nombre' => $request->nombre,
+            'apellidoUno' => $request->apellidoUno,
+            'apellidoDos' => $request->apellidoDos,
+            'email' => $request->email,
+            'telefono' => $request->telefono,
+            'userName' => $request->userName,
+            'idRol' => $request->idRol
+        ];
+
+
+        $data = array_filter($data, fn($value) => $value !== null);
+
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
         }
 
-        $usuario->update($validated);
+        $usuario->update($data);
 
         return response()->json([
             'success' => true,
             'message' => 'Usuario actualizado correctamente',
-            'data' => $usuario
+            'data' => $usuario->load('rol')
         ]);
     }
 
@@ -77,5 +112,12 @@ class UsuarioController extends Controller
             'success' => true,
             'message' => 'Usuario eliminado correctamente'
         ]);
+    }
+
+    public function buscar($username)
+    {
+        return response()->json(
+            Usuario::where('userName', 'LIKE', "%{$username}%")->get()
+        );
     }
 }

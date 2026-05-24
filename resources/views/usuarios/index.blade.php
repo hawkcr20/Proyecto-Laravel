@@ -68,7 +68,7 @@
         const tbody = document.getElementById("tbodyUsuarios");
 
         try {
-            const res = await authFetch("/api/usuarios", {
+            const res = await authFetch("/usuarios", {
                 method: "GET"
             });
 
@@ -101,11 +101,11 @@
                         <td>${usuario.userName ?? usuario.username ?? usuario.name ?? ""}</td>
                         <td>
                             <div class="d-flex justify-content-center gap-2">
-                                <a href="/usuarios/editar/${usuario.idUsuario ?? usuario.id}" class="btn btn-sm btn-primary">
+                                <a href="/usuarios/editar/${usuario.id}" class="btn btn-sm btn-primary">
                                     Editar
                                 </a>
 
-                                <button class="btn btn-sm btn-danger" onclick="eliminarUsuario(${usuario.idUsuario ?? usuario.id})">
+                                <button class="btn btn-sm btn-danger" onclick="eliminarUsuario(${usuario.id})">
                                     Eliminar
                                 </button>
                             </div>
@@ -126,7 +126,7 @@
     function eliminarUsuario(id) {
         if (!confirm("¿Seguro que deseas eliminar este usuario?")) return;
 
-        authFetch(`/api/usuarios/${id}`, {
+        authFetch(`/usuarios/${id}`, {
             method: "DELETE"
         })
             .then(res => {

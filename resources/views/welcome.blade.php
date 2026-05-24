@@ -11,127 +11,168 @@
 
 <body>
 
-<header class="header shadow">
-    <div class="container-fluid px-4 d-flex justify-content-between align-items-center">
+    <header class="header shadow">
+        <div class="container-fluid px-4 d-flex justify-content-between align-items-center">
 
-        <div class="d-flex align-items-center gap-3">
-            <img src="{{ asset('img/logo.png') }}" class="logo-header" alt="">
-            <a class="navbar-brand m-0" href="#">
-                <span id="nombreUsuario"></span>
-            </a>
-        </div>
-
-        <div id="authButtons">
-            <a href="/login" class="btn btn-login-neon">Login</a>
-        </div>
-
-    </div>
-</header>
-
-<div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-
-    <div class="carousel-inner">
-
-        <div class="carousel-item active">
-            <img src="{{ asset('img/crossfit.png') }}" class="d-block w-100" alt="">
-        </div>
-
-        <div class="carousel-item">
-            <img src="{{ asset('img/pilates.png') }}" class="d-block w-100" alt="">
-        </div>
-
-        <div class="carousel-item">
-            <img src="{{ asset('img/yoga.png') }}" class="d-block w-100" alt="">
-        </div>
-
-    </div>
-
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-    </button>
-
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-    </button>
-
-</div>
-
-<section class="container mt-5">
-    <h2 class="text-center mb-4 titulo">Nuestras Clases</h2>
-
-    <div class="row text-center">
-
-        <div class="col-md-4 mb-3">
-            <div class="card card-custom">
-                <img src="{{ asset('img/spinning.png') }}" class="img-fluid" alt="">
+            <div class="d-flex align-items-center gap-3">
+                <img src="{{ asset('img/logo.png') }}" class="logo-header" alt="">
+                <a class="navbar-brand m-0" href="#">
+                    <span id="nombreUsuario"></span>
+                </a>
             </div>
+
+            <div id="authButtons">
+                <a href="/login" class="btn btn-login-neon">Login</a>
+            </div>
+
+        </div>
+    </header>
+
+    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+
+        <div class="carousel-inner">
+
+            <div class="carousel-item active">
+                <img src="{{ asset('img/crossfit.png') }}" class="d-block w-100" alt="">
+            </div>
+
+            <div class="carousel-item">
+                <img src="{{ asset('img/pilates.png') }}" class="d-block w-100" alt="">
+            </div>
+
+            <div class="carousel-item">
+                <img src="{{ asset('img/yoga.png') }}" class="d-block w-100" alt="">
+            </div>
+
         </div>
 
-        <div class="col-md-4 mb-3">
-            <div class="card card-custom">
-                <img src="{{ asset('img/zumba.png') }}" class="img-fluid" alt="">
-            </div>
-        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
 
-        <div class="col-md-4 mb-3">
-            <div class="card card-custom">
-                <img src="{{ asset('img/funcional.png') }}" class="img-fluid" alt="">
-            </div>
-        </div>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
 
     </div>
-</section>
 
-<footer class="footer mt-5 py-4 text-center">
-    <div class="container">
-        <img src="{{ asset('img/logo.png') }}" width="120" class="mb-2" alt="">
-        <p class="mb-1">© 2026 VIKINGS</p>
-        <p class="mb-0 small">Todos los derechos reservados</p>
-    </div>
-</footer>
+    <section class="container mt-5">
+        <h2 class="text-center mb-4 titulo">Nuestras Clases</h2>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{{ asset('js/auth.js') }}"></script>
+        <div class="row text-center">
 
-<script>
-    const container = document.getElementById("authButtons");
+            <div class="col-md-4 mb-3">
+                <div class="card card-custom">
+                    <img src="{{ asset('img/spinning.png') }}" class="img-fluid" alt="">
+                </div>
+            </div>
 
-    if (typeof isAuthenticated === "function" && isAuthenticated()) {
-        if (typeof isAdmin === "function" && isAdmin()) {
-            container.innerHTML = `
+            <div class="col-md-4 mb-3">
+                <div class="card card-custom">
+                    <img src="{{ asset('img/zumba.png') }}" class="img-fluid" alt="">
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card card-custom">
+                    <img src="{{ asset('img/funcional.png') }}" class="img-fluid" alt="">
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="footer mt-5 py-4 text-center">
+        <div class="container">
+            <img src="{{ asset('img/logo.png') }}" width="120" class="mb-2" alt="">
+            <p class="mb-1">© 2026 VIKINGS</p>
+            <p class="mb-0 small">Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/auth.js') }}"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+
+            const container =
+                document.getElementById("authButtons");
+
+
+
+            if (isAuthenticated()) {
+
+                if (await isAdmin()) {
+
+                    container.innerHTML = `
                 <ul class="nav nav-tabs custom-nav">
+
                     <li class="nav-item">
-                        <a class="nav-link active" href="/horarioClases">Clases</a>
+                        <a class="nav-link active"
+                           href="/horarioClases">
+                            Clases
+                        </a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link" href="/adminDashboard">Admin</a>
+                        <a class="nav-link"
+                           href="/adminDashboard">
+                            Admin
+                        </a>
                     </li>
+
                     <li class="nav-item">
-                        <button class="nav-link btn-logout" onclick="logout()">Salir</button>
+                        <button
+                            class="nav-link btn-logout"
+                            onclick="logout()">
+
+                            Salir
+
+                        </button>
                     </li>
+
                 </ul>
             `;
-        } else if (typeof isUser === "function" && isUser()) {
-            container.innerHTML = `
+                } else if (await isUser()) {
+
+                    container.innerHTML = `
                 <ul class="nav nav-tabs custom-nav">
+
                     <li class="nav-item">
-                        <a class="nav-link" href="/historial">Historial</a>
+                        <a class="nav-link"
+                           href="/historial">
+                            Historial
+                        </a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link active" href="/horarioClases">Clases</a>
+                        <a class="nav-link active"
+                           href="/horarioClases">
+                            Clases
+                        </a>
                     </li>
+
                     <li class="nav-item">
-                        <button class="nav-link btn-logout" onclick="logout()">Salir</button>
+                        <button
+                            class="nav-link btn-logout"
+                            onclick="logout()">
+
+                            Salir
+
+                        </button>
                     </li>
+
                 </ul>
             `;
-        }
-    }
+                }
+            }
 
-    if (typeof getNombre === "function") {
-        getNombre();
-    }
-</script>
+
+
+            await getNombre();
+        });
+    </script>
 
 </body>
 

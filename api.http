@@ -8,5 +8,5 @@ Content-Type: application/json
 
 ###
 GET http://localhost:8000/api/clases
-Authorization: Bearer 2|ahz07ytZGMk0JSvmvfDevwkrKNXip5quu62aTljIf7a8ee8f
+Authorization: Bearer 1|779RvysKh8uIeVg2JWJHwM0WQdH4zTaFIxqyCfk25b1b1be9
 Accept: application/json

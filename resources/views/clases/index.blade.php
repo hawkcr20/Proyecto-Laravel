@@ -73,7 +73,7 @@
         const tbody = document.getElementById("tbodyClases");
 
         try {
-            const res = await authFetch("/api/clases", {
+            const res = await authFetch("/clases", {
                 method: "GET"
             });
 
@@ -138,7 +138,7 @@
     function eliminarClase(id) {
         if (!confirm("¿Seguro que deseas eliminar esta clase?")) return;
 
-        authFetch(`/api/clases/${id}`, {
+        authFetch(`/clases/${id}`, {
             method: "DELETE"
         })
             .then(res => {

@@ -75,7 +75,7 @@
         const mensajeVacio = document.getElementById("mensajeVacio");
 
         try {
-            const res = await authFetch(`/api/clases?diaSemana=${diaActual}`, {
+            const res = await authFetch(`/clases?diaSemana=${diaActual}`, {
                 method: "GET"
             });
 
