@@ -22,7 +22,7 @@ class AuthController extends Controller
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
-                'message' => 'Credenciales inválidas'
+                'message' => __('messages.invalid_credentials')
             ], 401);
         }
 
@@ -41,7 +41,7 @@ class AuthController extends Controller
             ->delete();
 
         return response()->json([
-            'message' => 'Sesión cerrada correctamente'
+            'message' => 'message.session_closed_successfully'
         ]);
     }
 

@@ -27,13 +27,7 @@ class UsuarioController extends Controller
             'password' => 'required|string|min:4'
         ]);
 
-        $authUser = $request->user();
-
         $idRol = 1;
-
-        if ($authUser && $authUser->rol && $authUser->rol->nombre === "ROLE_ADMIN") {
-            $idRol = 2;
-        }
 
         $usuario = Usuario::create([
             'nombre' => $request->nombre,
@@ -74,7 +68,7 @@ class UsuarioController extends Controller
             'telefono' => 'sometimes|string|max:20',
             'userName' => 'sometimes|string|unique:usuarios,userName,' . $id,
             'password' => 'nullable|string|min:4',
-            'idRol' => 'sometimes|integer'
+            'idRol' => 'sometimes|integer|exists:roles,id'
         ]);
 
         $data = [

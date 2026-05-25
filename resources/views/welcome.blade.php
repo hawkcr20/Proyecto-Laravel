@@ -85,95 +85,14 @@
     <footer class="footer mt-5 py-4 text-center">
         <div class="container">
             <img src="{{ asset('img/logo.png') }}" width="120" class="mb-2" alt="">
-            <p class="mb-1">© 2026 VIKINGS</p>
+            <p class="mb-1">2026 VIKINGS</p>
             <p class="mb-0 small">Todos los derechos reservados</p>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('js/auth.js') }}"></script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", async () => {
-
-            const container =
-                document.getElementById("authButtons");
-
-
-
-            if (isAuthenticated()) {
-
-                if (await isAdmin()) {
-
-                    container.innerHTML = `
-                <ul class="nav nav-tabs custom-nav">
-
-                    <li class="nav-item">
-                        <a class="nav-link active"
-                           href="/horarioClases">
-                            Clases
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           href="/adminDashboard">
-                            Admin
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <button
-                            class="nav-link btn-logout"
-                            onclick="logout()">
-
-                            Salir
-
-                        </button>
-                    </li>
-
-                </ul>
-            `;
-                } else if (await isUser()) {
-
-                    container.innerHTML = `
-                <ul class="nav nav-tabs custom-nav">
-
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           href="/historial">
-                            Historial
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link active"
-                           href="/horarioClases">
-                            Clases
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <button
-                            class="nav-link btn-logout"
-                            onclick="logout()">
-
-                            Salir
-
-                        </button>
-                    </li>
-
-                </ul>
-            `;
-                }
-            }
-
-
-
-            await getNombre();
-        });
-    </script>
-
+    <script src="{{ asset('js/inicio.js') }}"></script>
 </body>
 
 </html>

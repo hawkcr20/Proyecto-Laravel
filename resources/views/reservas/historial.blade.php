@@ -59,7 +59,7 @@
         <div class="container">
             <img src="{{ asset('img/logo.png') }}" alt="Logo" width="120" class="mb-2">
 
-            <p class="mb-1">© 2026 VIKINGS</p>
+            <p class="mb-1">2026 VIKINGS</p>
 
             <p class="mb-0 small">
                 Todos los derechos reservados
@@ -68,113 +68,7 @@
     </footer>
 
     <script src="{{ asset('js/auth.js') }}"></script>
-
-    <script>
-        requireAuth();
-
-        async function cargarHistorial() {
-
-            const tabla = document.getElementById("tablaHistorial");
-
-            try {
-
-                const response = await authFetch("/reservas/mis-clases", {
-                    method: "GET"
-                });
-
-                if (!response || !response.ok) {
-
-                    tabla.innerHTML = `
-                    <tr>
-                        <td colspan="5">
-                            No se pudo cargar el historial
-                        </td>
-                    </tr>
-                `;
-
-                    return;
-                }
-
-                const respuesta = await response.json();
-
-                const data = respuesta.data ?? respuesta;
-
-                tabla.innerHTML = "";
-
-                if (data.length === 0) {
-
-                    tabla.innerHTML = `
-                    <tr>
-                        <td colspan="5">
-                            No tienes clases reservadas
-                        </td>
-                    </tr>
-                `;
-
-                    return;
-                }
-
-                let contenido = "";
-
-                data.forEach(reserva => {
-
-                    const fechaFormateada = reserva.fechaReserva ?
-                        new Date(reserva.fechaReserva).toLocaleDateString("es-CR") :
-                        "";
-
-                    contenido += `
-                    <tr>
-
-                        <td>
-                            ${reserva.nombreClase ?? ""}
-                        </td>
-
-                        <td>
-                            ${reserva.capacidad ?? ""}
-                        </td>
-
-                        <td>
-                            ${fechaFormateada}
-                        </td>
-
-                        <td>
-                            ${reserva.horario ?? ""}
-                        </td>
-
-                        <td>
-                            ${reserva.estado ?? ""}
-                        </td>
-
-                    </tr>
-                `;
-                });
-
-                tabla.innerHTML = contenido;
-
-            } catch (error) {
-
-                console.error("Error:", error);
-
-                tabla.innerHTML = `
-                <tr>
-                    <td colspan="5">
-                        Error al cargar historial
-                    </td>
-                </tr>
-            `;
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-
-            cargarHistorial();
-
-            if (typeof getNombre === "function") {
-                getNombre();
-            }
-        });
-    </script>
-
+    <script src="{{ asset('js/historial.js') }}"></script>
 </body>
 
 </html>

@@ -27,21 +27,21 @@
     <div class="row g-4 justify-content-center">
 
         <div class="col-md-4">
-            <div class="registro-card p-4 text-center card-hover" onclick="location.href='/usuariosVista'">
+            <div class="registro-card p-4 text-center card-hover" data-href="/usuariosVista">
                 <h5 class="titulo">Gestionar Usuarios</h5>
                 <p class="subtitulo">Agregar, eliminar y actualizar usuarios</p>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="registro-card p-4 text-center card-hover" onclick="location.href='/clasesVista'">
+            <div class="registro-card p-4 text-center card-hover" data-href="/clasesVista">
                 <h5 class="titulo">Gestionar Clases</h5>
                 <p class="subtitulo">Agregar, eliminar y actualizar clases</p>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="registro-card p-4 text-center card-hover" onclick="location.href='/gestionReservas'">
+            <div class="registro-card p-4 text-center card-hover" data-href="/gestionReservas">
                 <h5 class="titulo">Gestionar Reservas</h5>
                 <p class="subtitulo">Agregar, eliminar y actualizar reservas</p>
             </div>
@@ -52,10 +52,7 @@
 </div>
 
 <script src="{{ asset('js/auth.js') }}"></script>
-
-<script>
-    requireAdmin();
-</script>
+<script src="{{ asset('js/admin-dashboard.js') }}"></script>
 
 </body>
 

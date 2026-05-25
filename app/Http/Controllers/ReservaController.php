@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Clase;
 use App\Models\Reserva;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class ReservaController extends Controller
 {
@@ -41,7 +44,7 @@ class ReservaController extends Controller
             return [
 
                 'idReserva' =>
-                $reserva->idReserva,
+                $reserva->id,
 
                 'nombreClase' =>
                 $reserva->clase->nombre ?? '',
@@ -72,19 +75,34 @@ class ReservaController extends Controller
 
         $validated = $request->validate([
 
-            'idUsuario' =>
-            'required|integer|exists:usuarios,id',
-
             'idClase' =>
             'required|integer|exists:clases,id',
 
             'estado' =>
-            'required|string|max:50',
+            'sometimes|string|max:50',
         ]);
 
+        $validated['idUsuario'] = $request->user()->id;
         $validated['fechaReserva'] = now();
+        $validated['estado'] = 'ACTIVA';
 
-        $reserva = Reserva::create($validated);
+        $reserva = DB::transaction(function () use ($validated) {
+            $clase = Clase::whereKey($validated['idClase'])
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            if ($clase->capacidad <= 0) {
+                throw ValidationException::withMessages([
+                    'idClase' => 'La clase no tiene cupos disponibles',
+                ]);
+            }
+
+            $reserva = Reserva::create($validated);
+
+            $clase->decrement('capacidad');
+
+            return $reserva;
+        });
 
         return response()->json([
             'success' => true,
@@ -177,7 +195,7 @@ class ReservaController extends Controller
     }
 
 
-    public function cancelar($id)
+    public function cancelar(Request $request, $id)
     {
 
         $reserva = Reserva::find($id);
@@ -188,6 +206,16 @@ class ReservaController extends Controller
                 'success' => false,
                 'message' => 'Reserva no encontrada'
             ], 404);
+        }
+
+        $usuario = $request->user();
+        $esAdmin = $usuario && $usuario->rol && $usuario->rol->nombre === 'ROLE_ADMIN';
+
+        if (!$esAdmin && $reserva->idUsuario !== $usuario->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No tienes permisos para cancelar esta reserva'
+            ], 403);
         }
 
         $reserva->estado = 'CANCELADA';

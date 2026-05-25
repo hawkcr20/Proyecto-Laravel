@@ -27,17 +27,24 @@
                 </div>
 
                 <div class="form-floating mb-3">
-                    <input type="password" id="password" class="form-control" placeholder="Contraseña" required>
-                    <label>Contraseña</label>
+                    <input type="password" id="password" class="form-control" placeholder="Contrasena" required>
+                    <label>Contrasena</label>
+                </div>
+
+                <div class="mb-3">
+                    <select id="idioma" class="form-select">
+                        <option value="es">Español</option>
+                        <option value="en">English</option>
+                    </select>
                 </div>
 
                 <div class="d-grid">
                     <button type="submit" class="btn btn-primary rounded-3">
-                        Iniciar sesión
+                        Iniciar sesion
                     </button>
 
                     <div class="text-center mt-3">
-                        <span>¿No tienes cuenta?</span>
+                        <span>No tienes cuenta?</span>
                         <a href="{{ url('/registro') }}" class="link-light fw-bold">
                             Crear cuenta
                         </a>
@@ -56,56 +63,7 @@
     </div>
 
     <script src="{{ asset('js/auth.js') }}"></script>
-
-
-    <script>
-        document
-            .getElementById("loginForm")
-            .addEventListener("submit", async function(e) {
-
-                e.preventDefault();
-
-                const userName = document.getElementById("username").value;
-                const password = document.getElementById("password").value;
-
-                try {
-
-                    const response = await fetch("/api/login", {
-
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Accept": "application/json"
-                        },
-
-                        body: JSON.stringify({
-                            userName,
-                            password
-                        })
-                    });
-
-                    const data = await response.json();
-
-                    if (!response.ok) {
-                        throw new Error(data.message || "Credenciales inválidas");
-                    }
-
-                    setToken(data.token);
-
-                    if (data.usuario) {
-                        setUser(data.usuario);
-                    }
-
-                    window.location.href = "/inicio";
-
-                } catch (error) {
-
-                    console.error(error);
-                    alert(error.message);
-                }
-            });
-    </script>
+    <script src="{{ asset('js/login.js') }}"></script>
 </body>
 
 </html>
