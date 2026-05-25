@@ -7,26 +7,25 @@ use Illuminate\Http\Request;
 
 class ClaseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    
+    public function index(Request $request)
     {
-        $clases = Clase::all();
+        $query = Clase::query();
+
+        if ($request->filled('diaSemana')) {
+            $query->where('diaSemana', $request->diaSemana);
+        }
 
         return response()->json([
             'success' => true,
-            'data' => $clases
+            'data' => $query->get()
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    
     public function store(Request $request)
     {
-        $validate = $request->validate([
-
+        $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'descripcion' => 'required|string',
             'diaSemana' => 'required|string|max:50',
@@ -34,47 +33,37 @@ class ClaseController extends Controller
             'capacidad' => 'required|integer|min:1',
         ]);
 
-        $clase = Clase::create($validate);
+        $clase = Clase::create($validated);
 
         return response()->json([
-
             'success' => true,
             'message' => 'Clase creada correctamente',
             'data' => $clase
         ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $clase = Clase::find($id);
 
         if (!$clase) {
-
             return response()->json([
-
                 'success' => false,
                 'message' => 'Clase no encontrada'
             ], 404);
         }
+
         return response()->json([
-            
             'success' => true,
             'data' => $clase
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $clase = Clase::find($id);
 
         if (!$clase) {
-
             return response()->json([
                 'success' => false,
                 'message' => 'Clase no encontrada'
@@ -82,7 +71,6 @@ class ClaseController extends Controller
         }
 
         $validated = $request->validate([
-
             'nombre' => 'required|string|max:255',
             'descripcion' => 'required|string',
             'diaSemana' => 'required|string|max:50',
@@ -93,24 +81,20 @@ class ClaseController extends Controller
         $clase->update($validated);
 
         return response()->json([
-
             'success' => true,
             'message' => 'Clase actualizada correctamente',
             'data' => $clase
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
-    {
+{
+    try {
+
         $clase = Clase::find($id);
 
         if (!$clase) {
-
             return response()->json([
-
                 'success' => false,
                 'message' => 'Clase no encontrada'
             ], 404);
@@ -119,9 +103,17 @@ class ClaseController extends Controller
         $clase->delete();
 
         return response()->json([
-            
             'success' => true,
             'message' => 'Clase eliminada correctamente'
         ]);
+
+    } catch (\Exception $e) {
+
+        return response()->json([
+            'success' => false,
+            'message' => 'No se puede eliminar la clase porque tiene reservas asociadas',
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
 }

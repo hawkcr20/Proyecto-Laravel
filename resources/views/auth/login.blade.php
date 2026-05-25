@@ -11,81 +11,59 @@
 
 <body class="bg-light">
 
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
 
-    <div class="card shadow-lg p-4 rounded-4" style="width: 350px;">
-
-        <div class="text-center mb-4">
-            <h3 class="fw-bold titulo">Bienvenido Viking</h3>
-        </div>
-
-        <form id="loginForm">
-
-            <div class="form-floating mb-3">
-                <input type="text" id="username" class="form-control" placeholder="Usuario" required>
-                <label>Usuario</label>
-            </div>
-
-            <div class="form-floating mb-3">
-                <input type="password" id="password" class="form-control" placeholder="Contraseña" required>
-                <label>Contraseña</label>
-            </div>
-
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary rounded-3">
-                    Iniciar sesión
-                </button>
-
-                <div class="text-center mt-3">
-                    <span>¿No tienes cuenta?</span>
-                    <a href="{{ url('/registro') }}" class="link-light fw-bold">Crear cuenta</a>
-                </div>
-            </div>
+        <div class="card shadow-lg p-4 rounded-4" style="width: 350px;">
 
             <div class="text-center mb-4">
-                <br>
-                <img src="{{ asset('img/logo.png') }}" alt="logo" class="logo">
+                <h3 class="fw-bold titulo">Bienvenido Viking</h3>
             </div>
 
-        </form>
+            <form id="loginForm">
+
+                <div class="form-floating mb-3">
+                    <input type="text" id="username" class="form-control" placeholder="Usuario" required>
+                    <label>Usuario</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="password" id="password" class="form-control" placeholder="Contrasena" required>
+                    <label>Contrasena</label>
+                </div>
+
+                <div class="mb-3">
+                    <select id="idioma" class="form-select">
+                        <option value="es">Español</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary rounded-3">
+                        Iniciar sesion
+                    </button>
+
+                    <div class="text-center mt-3">
+                        <span>No tienes cuenta?</span>
+                        <a href="{{ url('/registro') }}" class="link-light fw-bold">
+                            Crear cuenta
+                        </a>
+                    </div>
+                </div>
+
+                <div class="text-center mb-4">
+                    <br>
+                    <img src="{{ asset('img/logo.png') }}" alt="logo" class="logo">
+                </div>
+
+            </form>
+
+        </div>
 
     </div>
 
-</div>
-
-<script src="{{ asset('js/auth.js') }}"></script>
-
-<script>
-    document.getElementById("loginForm").addEventListener("submit", function (e) {
-        e.preventDefault();
-
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-
-        fetch("/registroCompleto/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password
-            })
-        })
-            .then(res => {
-                if (!res.ok) throw new Error("Credenciales inválidas");
-                return res.json();
-            })
-            .then(data => {
-                setToken(data.token);
-                window.location.href = "/inicio";
-            })
-            .catch(err => {
-                alert(err.message);
-            });
-    });
-</script>
-
+    <script src="{{ asset('js/auth.js') }}"></script>
+    <script src="{{ asset('js/login.js') }}"></script>
 </body>
+
 </html>

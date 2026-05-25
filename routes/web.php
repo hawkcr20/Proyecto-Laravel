@@ -26,6 +26,12 @@ Route::get('/usuariosVista', function () {
     return view('usuarios.index');
 });
 
+Route::get('/usuarios/editar/{id}', function ($id) {
+    return view('auth.registro', [
+        'idUsuario' => $id
+    ]);
+});
+
 Route::get('/clasesVista', function () {
     return view('clases.index');
 });
@@ -36,6 +42,12 @@ Route::get('/crearClase', function () {
 
 Route::get('/horarioClases', function () {
     return view('clases.horario');
+});
+
+Route::get('/clases/editar/{id}', function ($id) {
+    return view('clases.create', [
+        'idClase' => $id
+    ]);
 });
 
 Route::get('/reservas/{id}', function ($id) {

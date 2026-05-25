@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Gestión de Usuarios</title>
+    <title>Gestion de Usuarios</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/usuarios.css') }}">
@@ -14,11 +14,11 @@
 <nav class="navbar header px-4">
     <div class="d-flex align-items-center">
         <img src="{{ asset('img/logo.png') }}" class="logo me-2">
-        <h4 class="titulo m-0">Administración de Usuarios</h4>
+        <h4 class="titulo m-0">Administracion de Usuarios</h4>
     </div>
 
     <div class="d-flex gap-2">
-        <button class="btn btn-main" onclick="window.location.href='/registro'">
+        <button class="btn btn-main" type="button" id="btnCrearUsuario">
             + Crear Usuario
         </button>
 
@@ -41,7 +41,7 @@
                     <th>Nombre</th>
                     <th>Apellidos</th>
                     <th>Email</th>
-                    <th>Teléfono</th>
+                    <th>Telefono</th>
                     <th>Usuario</th>
                     <th>Acciones</th>
                 </tr>
@@ -60,88 +60,7 @@
 </div>
 
 <script src="{{ asset('js/auth.js') }}"></script>
-
-<script>
-    requireAdmin();
-
-    async function cargarUsuarios() {
-        const tbody = document.getElementById("tbodyUsuarios");
-
-        try {
-            const res = await authFetch("/api/usuarios", {
-                method: "GET"
-            });
-
-            if (!res || !res.ok) {
-                throw new Error("No se pudieron cargar los usuarios");
-            }
-
-            const respuesta = await res.json();
-
-            const usuarios = respuesta.data ?? respuesta;
-
-            tbody.innerHTML = "";
-
-            if (usuarios.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="6">No hay usuarios registrados</td>
-                    </tr>
-                `;
-                return;
-            }
-
-            usuarios.forEach(usuario => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${usuario.nombre ?? usuario.name ?? ""}</td>
-                        <td>${(usuario.apellidoUno ?? "") + " " + (usuario.apellidoDos ?? "")}</td>
-                        <td>${usuario.email ?? ""}</td>
-                        <td>${usuario.telefono ?? ""}</td>
-                        <td>${usuario.userName ?? usuario.username ?? usuario.name ?? ""}</td>
-                        <td>
-                            <div class="d-flex justify-content-center gap-2">
-                                <a href="/usuarios/editar/${usuario.idUsuario ?? usuario.id}" class="btn btn-sm btn-primary">
-                                    Editar
-                                </a>
-
-                                <button class="btn btn-sm btn-danger" onclick="eliminarUsuario(${usuario.idUsuario ?? usuario.id})">
-                                    Eliminar
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            });
-
-        } catch (error) {
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="6">${error.message}</td>
-                </tr>
-            `;
-        }
-    }
-
-    function eliminarUsuario(id) {
-        if (!confirm("¿Seguro que deseas eliminar este usuario?")) return;
-
-        authFetch(`/api/usuarios/${id}`, {
-            method: "DELETE"
-        })
-            .then(res => {
-                if (!res) return;
-
-                if (!res.ok) throw new Error("Error al eliminar usuario");
-
-                alert(" Usuario eliminado ");
-                cargarUsuarios();
-            })
-            .catch(err => alert(err.message));
-    }
-
-    document.addEventListener("DOMContentLoaded", cargarUsuarios);
-</script>
+<script src="{{ asset('js/usuarios.js') }}"></script>
 
 </body>
 

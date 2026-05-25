@@ -1,8 +1,12 @@
-### login
-POST http://localhost:8080/localhost:8000/api/login
+POST http://127.0.0.1:8000/api/login
 Content-Type: application/json
 
 {
-    "username": "admin@gmail.com",
-    "password": "1234"
+  "userName": "admin",
+  "password": "1234"
 }
+
+###
+GET http://localhost:8000/api/clases
+Authorization: Bearer 1|779RvysKh8uIeVg2JWJHwM0WQdH4zTaFIxqyCfk25b1b1be9
+Accept: application/json
