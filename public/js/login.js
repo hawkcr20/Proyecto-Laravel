@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 throw new Error(data.message || "Credenciales invalidas");
             }
 
+            setLanguage(idioma);
             setToken(data.token);
 
             if (data.usuario) {

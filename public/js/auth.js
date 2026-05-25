@@ -25,6 +25,14 @@ function removeUser() {
     localStorage.removeItem("user");
 }
 
+function getLanguage() {
+    return localStorage.getItem("idioma") || "es";
+}
+
+function setLanguage(idioma) {
+    localStorage.setItem("idioma", idioma);
+}
+
 
 function isAuthenticated() {
     return !!getToken();
@@ -42,6 +50,7 @@ async function authFetch(url, options = {}) {
     const headers = {
         Accept: "application/json",
         "Content-Type": "application/json",
+        "Accept-Language": getLanguage(),
         ...(options.headers || {})
     };
 
@@ -129,9 +138,11 @@ async function getNombre() {
     const nombreCompleto = `${usuario.nombre ?? ""} ${usuario.apellidoUno ?? ""}`.trim();
 
     const ruta = window.location.pathname;
+    const idioma = getLanguage();
 
     if (ruta.includes("inicio")) {
-        elemento.textContent = `¡Hola, ${nombreCompleto}! 👋`;
+        const saludo = idioma === "en" ? "Hello" : "Hola";
+        elemento.textContent = `${saludo}, ${nombreCompleto}!`;
     } else if (ruta.includes("historial")) {
         elemento.textContent = `Historial de ${nombreCompleto}`;
     } else {
